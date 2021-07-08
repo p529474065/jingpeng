@@ -14,18 +14,27 @@ public class BigMealCount {
     class Solution {
         public int countPairs(int[] deliciousness) {
             final int MOD = 1000000007;
-            int maxNum = 0;
+            int maxVal = 0;
             for (int a : deliciousness) {
-                maxNum = Math.max(a, maxNum);
+                maxVal = Math.max(a, maxVal);
             }
-            int maxSum = 2* maxNum;
-            Map recordMap = new HashMap<>();
+            int maxSum = 2* maxVal;
+            int pairs = 0;
+            Map<Integer, Integer> map = new HashMap<>();
             int length = deliciousness.length;
-            for (int i = 0; i < length-1; i++) {
+            for (int i = 0; i < length; i++) {
                 int val = deliciousness[i];
-
+                for (int sum = 1; sum <= maxSum; sum <<= 1) {
+//                    int count = map.getOrDefault(sum - val, 0);
+//                    pairs = (pairs + count) % MOD;
+                    pairs += map.getOrDefault(sum - val, 0);
+                    if (pairs >= MOD) {
+                        pairs -= MOD;
+                    }
+                }
+                map.put(val, map.getOrDefault(val, 0) + 1);
             }
-            return 0;
+            return pairs;
         }
     }
 }
